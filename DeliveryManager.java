@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,7 +7,9 @@ public class DeliveryManager {
     static ArrayList<Package> packages = new ArrayList<>();
 
     public static void main(String[] args) {
-
+        
+        
+        
         int choice;
         do {
             System.out.println("\n==== DELIVERY PACKAGE MANAGER ====");
@@ -15,14 +18,16 @@ public class DeliveryManager {
             System.out.println("3. Display Packages");
             System.out.println("4. Exit");
             System.out.println("=====================================");
-            System.out.print("Enter choice: ");
+            System.out.print("Enter choice:  ");
             choice = Integer.parseInt(sc.nextLine());
+            
+            
 
             switch (choice) {
                 case 1 -> addPackage();
                 case 2 -> sortPackages();
                 case 3 -> displayPackages();
-                case 4 -> System.out.println("\nExiting program...");
+                case 4 -> System.out.println("Exiting program...");
                 default -> System.out.println("Invalid choice!");
             }
         } while (choice != 4);
@@ -30,31 +35,31 @@ public class DeliveryManager {
 
     static void addPackage() {
         System.out.println("-----------------------------------------");
-        System.out.println("\n========= INPUT PACKAGE INFO =========");
-        System.out.print("Enter ID (int): ");
+        System.out.println("\n=========INPUT THE NEEDED INFO=========");
+        System.out.print("Enter ID (int):  ");
         int id = sc.nextInt();
-        sc.nextLine(); // clear newline
-
+        sc.nextLine();
+        
         if (id < 0) {
             System.out.println("ID must be positive!");
             return;
         }
-
         for (Package p : packages) {
             if (p.getId() == id) {
                 System.out.println("Duplicate ID not allowed!");
                 return;
             }
         }
+        
 
-        System.out.print("Enter Recipient Name: ");
+        System.out.print("Enter Recipient Name:  ");
         String name = sc.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("Name cannot be empty!");
             return;
         }
 
-        System.out.print("Enter Weight (kg): ");
+        System.out.print("Enter Weight (kg):  ");
         double weight = Double.parseDouble(sc.nextLine());
         if (weight <= 0) {
             System.out.println("Weight must be positive!");
@@ -65,53 +70,71 @@ public class DeliveryManager {
         System.out.println("Package added successfully!");
     }
 
+    // ================= SORT (BUBBLE SORT) =================
     static void sortPackages() {
         if (packages.isEmpty()) {
             System.out.println("No packages to sort!");
             return;
         }
-
+        
+        System.out.println("-----------------------------------------");
         System.out.println("\nSort by:");
         System.out.println("1. ID");
         System.out.println("2. Recipient Name");
         System.out.println("3. Weight");
-        System.out.print("Enter choice: ");
+        System.out.print("Enter choice:  ");  // ✅ prompt added
         int type = Integer.parseInt(sc.nextLine());
 
         System.out.println("\nOrder:");
         System.out.println("1. Ascending");
         System.out.println("2. Descending");
-        System.out.print("Enter choice: ");
+        System.out.print("Enter choice:  ");  // ✅ prompt added
         int order = Integer.parseInt(sc.nextLine());
+
         boolean ascending = (order == 1);
 
-        // BUBBLE SORT (without unused boolean)
+        // BUBBLE SORT
         for (int i = 0; i < packages.size() - 1; i++) {
             for (int j = 0; j < packages.size() - i - 1; j++) {
+
                 Package p1 = packages.get(j);
                 Package p2 = packages.get(j + 1);
 
-                boolean condition = switch (type) {
-                    case 1 -> ascending ? p1.getId() > p2.getId() : p1.getId() < p2.getId();
-                    case 2 -> ascending ? p1.getRecipientName().compareToIgnoreCase(p2.getRecipientName()) > 0
-                                        : p1.getRecipientName().compareToIgnoreCase(p2.getRecipientName()) < 0;
-                    case 3 -> ascending ? p1.getWeight() > p2.getWeight() : p1.getWeight() < p2.getWeight();
-                    default -> false;
-                };
+                boolean swap = false;
 
-                if (condition) {
+                switch (type) {
+                    case 1: // ID
+                       swap = compareInt(p1.getId(), p2.getId(), ascending);
+                        break;
+                    case 2: // Name (case-insensitive)
+                        swap = compareString(
+                                p1.getRecipientName().toLowerCase(),
+                                p2.getRecipientName().toLowerCase(),
+                                ascending
+                        );
+                        break;
+                    case 3: // Weight
+                        swap = compareDouble(p1.getWeight(), p2.getWeight(), ascending);
+                        break;
+                    default:
+                        System.out.println("Invalid sort type!");
+                        return;
+                }
+
+                if (swap) {
                     packages.set(j, p2);
                     packages.set(j + 1, p1);
                 }
             }
         }
 
-        System.out.println("\nPackages sorted successfully!");
+        System.out.println("Packages sorted successfully!\n");
         displayPackages();
     }
 
+    // ================= DISPLAY =================
     static void displayPackages() {
-        if (packages.isEmpty()) {
+        if (packages.size() == 0) {
             System.out.println("No packages available!");
             return;
         }
@@ -124,4 +147,18 @@ public class DeliveryManager {
             System.out.println(p);
         }
     }
+    
+    // ================= HELPERS =================
+    static boolean compareString(String a, String b, boolean asc) {
+        return asc ? a.compareTo(b) > 0 : a.compareTo(b) < 0;
+    }
+
+    static boolean compareDouble(double a, double b, boolean asc) {
+        return asc ? a > b : a < b;
+    }
+     static boolean compareInt(double a, double b, boolean asc) {
+        return asc ? a > b : a < b;
+    }
+
 }
+

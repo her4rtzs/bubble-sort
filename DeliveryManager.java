@@ -6,16 +6,16 @@ public class DeliveryManager {
     static ArrayList<Package> packages = new ArrayList<>();
 
     public static void main(String[] args) {
-        System.out.println("\n==== DELIVERY PACKAGE MANAGER ====");
-        System.out.println("1. Add Package");
-        System.out.println("2. Sort Packages");
-        System.out.println("3. Display Packages");
-        System.out.println("4. Exit");
 
         int choice;
         do {
-            System.out.println("\n=====================================");
-            System.out.print("Enter choice (1-Add, 2-Sort, 3-Display, 4-Exit): ");
+            System.out.println("\n==== DELIVERY PACKAGE MANAGER ====");
+            System.out.println("1. Add Package");
+            System.out.println("2. Sort Packages");
+            System.out.println("3. Display Packages");
+            System.out.println("4. Exit");
+            System.out.println("=====================================");
+            System.out.print("Enter choice: ");
             choice = Integer.parseInt(sc.nextLine());
 
             switch (choice) {
@@ -29,6 +29,7 @@ public class DeliveryManager {
     }
 
     static void addPackage() {
+        System.out.println("-----------------------------------------");
         System.out.println("\n========= INPUT PACKAGE INFO =========");
         System.out.print("Enter ID (int): ");
         int id = sc.nextInt();
